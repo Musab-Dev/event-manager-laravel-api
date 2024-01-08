@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->string('name')->nullable(false);
             $table->text('description')->nullable();
-            $table->int('capacity')->required();
+            $table->integer('capacity')->required();
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->unsignedBigInteger('owner_id');
