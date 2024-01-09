@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\EventResource;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,7 +14,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return Event::all();
+        return EventResource::collection(Event::with(['owner', 'attendees.user'])->get());
     }
 
     /**
@@ -34,7 +35,7 @@ class EventController extends Controller
             'owner_id' => 1
         ]);
 
-        return $event;
+        return new EventResource($event);
     }
 
     /**
@@ -42,7 +43,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        return $event;
+        return new EventResource($event);
     }
 
     /**
@@ -61,7 +62,7 @@ class EventController extends Controller
         
         $event->update($data);
 
-        return $event;
+        return new EventResource($event);
     }
 
     /**
