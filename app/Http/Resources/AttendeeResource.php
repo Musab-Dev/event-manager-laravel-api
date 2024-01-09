@@ -16,6 +16,7 @@ class AttendeeResource extends JsonResource
     {        
         return [
             'attendee_info' => new UserResource($this->whenLoaded('user')),
+            'event_info' => new EventResource($this->whenLoaded('event')),
             'registration_date' => $this->created_at->format('d-m-Y h:i:s a'),
         ];
     }
