@@ -71,8 +71,11 @@ class EventController extends Controller
     {
         $event->delete();
 
-        return response()->json([
-            'message' => 'Event Deleted Successfully!'
-        ]);
+        // return response()->json([
+        //     'message' => 'Event Deleted Successfully!'
+        // ]);
+
+        // common practice => 204 No Content is available
+        return response(status: 204);
     }
 }
