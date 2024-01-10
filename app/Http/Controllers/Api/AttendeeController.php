@@ -17,7 +17,7 @@ class AttendeeController extends Controller
     {
         $attendees = $event->attendees()->with('user')->latest();
 
-        return AttendeeResource::collection($attendees->paginate(5));
+        return AttendeeResource::collection($attendees->paginate(10));
     }
 
     /**
