@@ -27,12 +27,11 @@ class AttendeeController extends Controller
     {
         $data = $request->validate([
             'user_id' => 'required|integer',
-            'event_id' => 'required|integer'
         ]);
 
-        $attendee = Attendee::create($data);
+        $attendee = $event->attendees()->create($data);
 
-        return new AttendeeResource($attendee->load('user'));
+        return new AttendeeResource($attendee->load(['user', 'event']));
     }
 
     /**
