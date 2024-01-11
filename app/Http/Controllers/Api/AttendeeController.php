@@ -14,6 +14,11 @@ class AttendeeController extends Controller
     use CanLoadRelations;
     private $availableRelations = ['user', 'event'];
 
+    public function __construct() {
+        // only protect the routes [store, destroy] (only authenticated users)
+        $this->middleware('auth:sanctum')->only(['store', 'destroy']);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -30,9 +35,10 @@ class AttendeeController extends Controller
      */
     public function store(Request $request, Event $event)
     {
-        $data = $request->validate([
-            'user_id' => 'required|integer',
-        ]);
+        // store the attendance request to the event for the logged-in user
+        $data = [
+            'user_id' => $request->user()->id
+        ];
 
         $attendee = $event->attendees()->create($data);
 
@@ -44,21 +50,6 @@ class AttendeeController extends Controller
      */
     public function show(Event $event, Attendee $attendee)
     {
-        return new AttendeeResource($this->loadRelations($attendee));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Event $event, Attendee $attendee)
-    {
-        $data = $request->validate([
-            'user_id' => 'sometimes|integer',
-            'event_id' => 'sometimes|integer'
-        ]);
-
-        $attendee->update($data);
-
         return new AttendeeResource($this->loadRelations($attendee));
     }
 

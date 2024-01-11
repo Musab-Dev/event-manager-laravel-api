@@ -13,6 +13,12 @@ class EventController extends Controller
     use CanLoadRelations;
     private $availableRelations = ['owner', 'attendees', 'attendees.user'];
     
+    public function __construct() {
+        // all routes will be protected (only authenticated users)
+        // except [index, show] are available for all users/visitors
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -35,9 +41,10 @@ class EventController extends Controller
             'end_date' => 'required|date|after:start_date'
         ]);
 
+        // create the event and set the owner to the logged-in user
         $event = Event::create([
             ...$data,
-            'owner_id' => 1
+            'owner_id' => $request->user()->id,
         ]);
 
         return new EventResource($this->loadRelations($event));
