@@ -8,6 +8,7 @@ use App\Models\Attendee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AttendeeResource;
+use Illuminate\Support\Facades\Gate;
 
 class AttendeeController extends Controller
 {
@@ -58,6 +59,10 @@ class AttendeeController extends Controller
      */
     public function destroy(Event $event, Attendee $attendee)
     {
+        if (Gate::denies('delete-attendee', [$event, $attendee])){
+            abort(403, "you are not authorized to delete this attendee.");
+        }
+
         $attendee->delete();
         
         return response(status: 204);

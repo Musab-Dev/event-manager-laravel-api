@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\EventResource;
-use App\Http\Traits\CanLoadRelations;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\EventResource;
+use App\Http\Traits\CanLoadRelations;
 
 class EventController extends Controller
 {
@@ -63,6 +64,11 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        if (Gate::denies('update-event', $event)){
+            abort(403, "you are not authorized to edit this event.");
+        }
+        // $this->authorize('update-event', $event);
+
         $data = $request->validate([
             'name' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
