@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Event;
+use App\Notifications\EventRemainderNotificaiton;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 
@@ -37,7 +38,7 @@ class SendEventRemainders extends Command
             foreach ($event->attendees as $attendee){
                 $this->info("notifying the user \t{$attendee->user->name}.");
 
-                // Email sending code goes here...
+                $attendee->user->notify(new EventRemainderNotificaiton($attendee->user, $event));
             }
         }
         
