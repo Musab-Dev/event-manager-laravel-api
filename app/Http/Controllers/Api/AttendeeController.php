@@ -18,6 +18,8 @@ class AttendeeController extends Controller
     public function __construct() {
         // only protect the routes [store, destroy] (only authenticated users)
         $this->middleware('auth:sanctum')->only(['store', 'destroy']);
+
+        $this->authorizeResource(Attendee::class, 'attendee');
     }
 
     /**
@@ -59,10 +61,10 @@ class AttendeeController extends Controller
      */
     public function destroy(Event $event, Attendee $attendee)
     {
-        if (Gate::denies('delete-attendee', [$event, $attendee])){
-            abort(403, "you are not authorized to delete this attendee.");
-        }
-
+        // if (Gate::denies('delete-attendee', [$event, $attendee])){
+        //     abort(403, "you are not authorized to delete this attendee.");
+        // }
+        
         $attendee->delete();
         
         return response(status: 204);

@@ -18,6 +18,9 @@ class EventController extends Controller
         // all routes will be protected (only authenticated users)
         // except [index, show] are available for all users/visitors
         $this->middleware('auth:sanctum')->except(['index', 'show']);
+
+        // to apply policies on the routes
+        $this->authorizeResource(Event::class, 'event');
     }
 
     /**
@@ -64,11 +67,16 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        if (Gate::denies('update-event', $event)){
-            abort(403, "you are not authorized to edit this event.");
-        }
+        // all authorization will in the policy class
+        // if (Gate::denies('update-event', $event)) {
+        //     abort(403, "you are not authorized to edit this event.");
+        // }
         // $this->authorize('update-event', $event);
 
+        // for manually authorize the user using policy
+        if ($request->user()->cannot('update', $event)){
+            abort(403, "you are not authorized to edit this event.");
+        }
         $data = $request->validate([
             'name' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
