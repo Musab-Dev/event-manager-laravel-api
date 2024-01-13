@@ -33,6 +33,7 @@ class SendEventRemainders extends Command
         $this->info("Found {$eventsCount} {$eventLabel} in the next 24 hours.\n");
 
         foreach($eventsInNext24Hours as $event){
+            $this->info("\nEvent {$event->name}:\n");
             foreach ($event->attendees as $attendee){
                 $this->info("notifying the user \t{$attendee->user->name}.");
 
