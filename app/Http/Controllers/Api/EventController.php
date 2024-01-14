@@ -18,6 +18,8 @@ class EventController extends Controller
         // all routes will be protected (only authenticated users)
         // except [index, show] are available for all users/visitors
         $this->middleware('auth:sanctum')->except(['index', 'show']);
+        // limit the api calls for [store, destroy] -write actions- (abuse prevention)
+        $this->middleware('throttle:api')->only(['store', 'update', 'destroy']);
 
         // to apply policies on the routes
         $this->authorizeResource(Event::class, 'event');

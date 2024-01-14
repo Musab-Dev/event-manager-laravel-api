@@ -18,6 +18,8 @@ class AttendeeController extends Controller
     public function __construct() {
         // only protect the routes [store, destroy] (only authenticated users)
         $this->middleware('auth:sanctum')->only(['store', 'destroy']);
+        // limit the api calls for [store, destroy] -write actions- (abuse prevention)
+        $this->middleware('throttle:api')->only(['store', 'destroy']);
 
         $this->authorizeResource(Attendee::class, 'attendee');
     }
